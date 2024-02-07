@@ -297,9 +297,10 @@ data "aws_iam_policy_document" "api2" {
   statement {
     sid       = "lambda0"
     effect    = "Allow"
-    resources = ["arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:*"]
+    resources = ["arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:${var.application_name}-*"]
 
     actions = [
+      "lambda:DeleteFunctionConcurrency",
       "lambda:UpdateFunctionConfiguration",
       "lambda:UpdateFunctionCode",
       "lambda:RemovePermission",
