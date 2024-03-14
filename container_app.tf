@@ -56,7 +56,6 @@ data "aws_iam_policy_document" "container0" {
       "elasticloadbalancing:DescribeLoadBalancerAttributes",
       "ec2:DescribeNetworkInterfaces",
       "elasticloadbalancing:DescribeListeners",
-      "iam:PassRole",
       "ec2:DescribeSecurityGroupRules",
       "ecs:DeregisterTaskDefinition",
       "route53:GetHostedZone",
