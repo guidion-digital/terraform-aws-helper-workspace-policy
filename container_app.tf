@@ -186,7 +186,10 @@ data "aws_iam_policy_document" "container2" {
     sid       = "secrets1"
     effect    = "Allow"
     resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:/github/access_credentials-*"]
-    actions   = ["secretsmanager:DescribeSecret"]
+    actions   = [
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:GetResourcePolicy"
+    ]
   }
 }
 
