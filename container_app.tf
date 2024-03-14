@@ -56,7 +56,6 @@ data "aws_iam_policy_document" "container0" {
       "elasticloadbalancing:DescribeLoadBalancerAttributes",
       "ec2:DescribeNetworkInterfaces",
       "elasticloadbalancing:DescribeListeners",
-      "iam:PassRole",
       "ec2:DescribeSecurityGroupRules",
       "ecs:DeregisterTaskDefinition",
       "route53:GetHostedZone",
@@ -187,7 +186,10 @@ data "aws_iam_policy_document" "container2" {
     sid       = "secrets1"
     effect    = "Allow"
     resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:/github/access_credentials-*"]
-    actions   = ["secretsmanager:DescribeSecret"]
+    actions   = [
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:GetResourcePolicy"
+    ]
   }
 }
 
