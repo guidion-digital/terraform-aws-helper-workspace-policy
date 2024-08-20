@@ -218,3 +218,4 @@ output "generated_container_policy_1" {
   description = "The first container policy string that was generated. Used for testing"
   value       = one([for this_app in data.aws_iam_policy_document.container0 : this_app.json])
 }
+
