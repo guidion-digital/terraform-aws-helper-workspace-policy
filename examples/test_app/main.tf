@@ -9,4 +9,5 @@ module "workspace_user_permissions" {
   cdn_app       = null
   api_app       = null
   container_app = null
+  ec2_app       = null
 }
