@@ -22,9 +22,21 @@ data "aws_iam_policy_document" "ec2_0" {
 
     actions = [
       "sts:GetCallerIdentity",
+      "ssm:GetParameter"
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "ec2_1" {
+
+  statement {
+    sid       = "ec20"
+    effect    = "Allow"
+    resources = ["*"]
+
+    actions = [
       "ec2:DescribeTransitGateways",
       "ec2:DescribeVpcs",
-      "ssm:GetParameter",
       "ec2:DescribeAvailabilityZones",
       "ec2:DescribeVpcAttribute",
       "ec2:DescribeNetworkAcls",
@@ -70,7 +82,8 @@ data "aws_iam_policy_document" "ec2_0" {
 
 resource "aws_iam_policy" "ec2_app_policies" {
   for_each = var.ec2_app != null ? {
-    "ec2-app0" = data.aws_iam_policy_document.ec2_0,
+    "ec2-app0" = data.aws_iam_policy_document.ec2_0
+    "ec2-app1" = data.aws_iam_policy_document.ec2_1
   } : {}
 
   name   = "${var.application_name}-${each.key}"
