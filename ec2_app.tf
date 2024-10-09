@@ -14,6 +14,7 @@ variable "ec2_app" {
 # scale forever though, since they also have a policy number limit of 10 (adjustable
 # to 20): https://repost.aws/knowledge-center/iam-increase-policy-size
 data "aws_iam_policy_document" "ec2_0" {
+  count = var.ec2_app != null ? 1 : 0
 
   statement {
     sid       = "ec20"
@@ -28,6 +29,7 @@ data "aws_iam_policy_document" "ec2_0" {
 }
 
 data "aws_iam_policy_document" "ec2_1" {
+  count = var.ec2_app != null ? 1 : 0
 
   statement {
     sid       = "ec20"
@@ -82,7 +84,7 @@ data "aws_iam_policy_document" "ec2_1" {
 
 resource "aws_iam_policy" "ec2_app_policies" {
   for_each = var.ec2_app != null ? {
-    "ec2-app0" = data.aws_iam_policy_document.ec2_0
+    "ec2-app0" = data.aws_iam_policy_document.ec2_0,
     "ec2-app1" = data.aws_iam_policy_document.ec2_1
   } : {}
 
