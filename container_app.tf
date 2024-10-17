@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "container0" {
       "route53:GetHostedZone",
       "route53:GetChange",
       "route53:ChangeResourceRecordSets",
-      "logs:DeleteLogGroup"
+      "logs:DeleteLogGroup",
       "logs:CreateLogGroup",
       "elasticloadbalancing:DescribeTargetGroups",
       "elasticloadbalancing:DescribeTargetGroupAttributes",
@@ -119,7 +119,7 @@ data "aws_iam_policy_document" "container1" {
       "elasticloadbalancing:ModifyLoadBalancerAttributes",
       "elasticloadbalancing:DescribeTargetGroups",
       "elasticloadbalancing:DescribeTags",
-      "elasticloadbalancing:DescribeLoadBalancers"
+      "elasticloadbalancing:DescribeLoadBalancers",
       "elasticloadbalancing:DeleteTargetGroup",
       "elasticloadbalancing:DeleteLoadBalancer",
       "elasticloadbalancing:DeleteListener",
@@ -144,7 +144,7 @@ data "aws_iam_policy_document" "container1" {
     actions = [
       "ecs:UntagResource",
       "ecs:TagResource",
-      "ecs:ListTagsForResource"
+      "ecs:ListTagsForResource",
       "ecs:DescribeClusters",
       "ecs:DeleteCluster",
     ]
