@@ -162,7 +162,7 @@ data "aws_iam_policy_document" "container2" {
       "ecs:UpdateService",
       "ecs:UntagResource",
       "ecs:TagResource",
-      "ecs:ListTagsForResource"
+      "ecs:ListTagsForResource",
       "ecs:DescribeServices",
       "ecs:DeleteService",
       "ecs:CreateService",
