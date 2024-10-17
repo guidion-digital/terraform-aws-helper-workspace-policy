@@ -35,62 +35,62 @@ data "aws_iam_policy_document" "container0" {
 
     actions = [
       "sts:GetCallerIdentity",
-      "ec2:DescribeTransitGateways",
-      "ec2:DescribeAvailabilityZones",
+      "secretsmanager:TagResource",
+      "secretsmanager:ListSecrets",
+      "route53:ListTagsForResource",
+      "route53:ListResourceRecordSets",
       "route53:ListHostedZones",
-      "ecs:CreateCluster",
-      "ecs:RegisterTaskDefinition",
-      "ec2:DescribeVpcs",
-      "ecs:DescribeTaskDefinition",
-      "ec2:DescribeVpcClassicLink",
-      "ec2:DescribeVpcClassicLinkDnsSupport",
-      "ec2:DescribeNetworkAcls",
-      "ec2:DescribeRouteTables",
-      "ec2:DescribeSecurityGroups",
+      "route53:GetHostedZone",
+      "route53:GetChange",
+      "route53:ChangeResourceRecordSets",
+      "logs:DeleteLogGroup",
+      "logs:CreateLogGroup",
       "elasticloadbalancing:DescribeTargetGroups",
-      "elasticloadbalancing:DescribeTags",
-      "ec2:DescribeSubnets",
       "elasticloadbalancing:DescribeTargetGroupAttributes",
-      "ec2:DescribeTransitGatewayVpcAttachments",
+      "elasticloadbalancing:DescribeTags",
       "elasticloadbalancing:DescribeLoadBalancers",
       "elasticloadbalancing:DescribeLoadBalancerAttributes",
-      "ec2:DescribeNetworkInterfaces",
       "elasticloadbalancing:DescribeListeners",
-      "ec2:DescribeSecurityGroupRules",
+      "ecs:RegisterTaskDefinition",
+      "ecs:DescribeTaskDefinition",
       "ecs:DeregisterTaskDefinition",
-      "route53:GetHostedZone",
-      "route53:ListTagsForResource",
-      "route53:ChangeResourceRecordSets",
-      "route53:ListResourceRecordSets",
-      "route53:GetChange",
-      "ec2:CreateVpc",
-      "ec2:CreateRouteTable",
-      "ec2:AssociateRouteTable",
-      "ec2:CreateTags",
-      "ec2:ModifyVpcAttribute",
-      "ec2:DescribeVpcAttribute",
-      "ec2:DeleteVpc",
-      "ec2:DeleteRouteTable",
-      "ec2:DisassociateRouteTable",
-      "ec2:CreateSubnet",
-      "ec2:CreateTags",
-      "ec2:RevokeSecurityGroupEgress",
+      "ecs:CreateCluster",
       "ec2:RevokeSecurityGroupIngress",
-      "ec2:DeleteSecurityGroup",
-      "ec2:CreateSecurityGroup",
-      "ec2:CreateTransitGatewayVpcAttachment",
-      "ec2:AuthorizeSecurityGroupIngress",
-      "ec2:AuthorizeSecurityGroupEgress",
-      "ec2:CreateRoute",
-      "ec2:DeleteRoute",
+      "ec2:RevokeSecurityGroupEgress",
+      "ec2:ModifyVpcAttribute",
+      "ec2:DisassociateRouteTable",
+      "ec2:DescribeVpcs",
+      "ec2:DescribeVpcClassicLinkDnsSupport",
+      "ec2:DescribeVpcClassicLink",
+      "ec2:DescribeVpcAttribute",
+      "ec2:DescribeTransitGatewayVpcAttachments",
+      "ec2:DescribeTransitGateways",
+      "ec2:DescribeSubnets",
+      "ec2:DescribeSecurityGroups",
+      "ec2:DescribeSecurityGroupRules",
+      "ec2:DescribeRouteTables",
+      "ec2:DescribeNetworkInterfaces",
+      "ec2:DescribeNetworkAcls",
+      "ec2:DescribeAvailabilityZones",
+      "ec2:DeleteVpc",
       "ec2:DeleteTransitGatewayVpcAttachment",
       "ec2:DeleteSubnet",
+      "ec2:DeleteSecurityGroup",
+      "ec2:DeleteRouteTable",
+      "ec2:DeleteRoute",
+      "ec2:CreateVpc",
+      "ec2:CreateTransitGatewayVpcAttachment",
+      "ec2:CreateTags",
+      "ec2:CreateTags",
+      "ec2:CreateSubnet",
+      "ec2:CreateSecurityGroup",
+      "ec2:CreateRouteTable",
+      "ec2:CreateRoute",
+      "ec2:AuthorizeSecurityGroupIngress",
+      "ec2:AuthorizeSecurityGroupEgress",
+      "ec2:AssociateRouteTable",
       "cloudformation:CreateResource",
       "cloudformation:*",
-      "secretsmanager:ListSecrets",
-      "secretsmanager:TagResource",
-      "logs:CreateLogGroup",
-      "logs:DeleteLogGroup"
     ]
   }
 
@@ -100,9 +100,9 @@ data "aws_iam_policy_document" "container0" {
     resources = ["${var.container_app.targetgroup_arn}/*"]
 
     actions = [
-      "elasticloadbalancing:CreateTargetGroup",
       "elasticloadbalancing:ModifyTargetGroupAttributes",
       "elasticloadbalancing:DeleteTargetGroup",
+      "elasticloadbalancing:CreateTargetGroup",
     ]
   }
 }
@@ -115,17 +115,17 @@ data "aws_iam_policy_document" "container1" {
     effect    = "Allow"
     resources = var.container_app.loadbalancers
     actions = [
-      "elasticloadbalancing:CreateLoadBalancer",
-      "elasticloadbalancing:CreateListener",
-      "elasticloadbalancing:DeleteListener",
-      "elasticloadbalancing:ModifyLoadBalancerAttributes",
-      "elasticloadbalancing:DeleteLoadBalancer",
-      "elasticloadbalancing:CreateTargetGroup",
       "elasticloadbalancing:ModifyTargetGroupAttributes",
-      "elasticloadbalancing:DeleteTargetGroup",
+      "elasticloadbalancing:ModifyLoadBalancerAttributes",
       "elasticloadbalancing:DescribeTargetGroups",
       "elasticloadbalancing:DescribeTags",
-      "elasticloadbalancing:DescribeLoadBalancers"
+      "elasticloadbalancing:DescribeLoadBalancers",
+      "elasticloadbalancing:DeleteTargetGroup",
+      "elasticloadbalancing:DeleteLoadBalancer",
+      "elasticloadbalancing:DeleteListener",
+      "elasticloadbalancing:CreateTargetGroup",
+      "elasticloadbalancing:CreateLoadBalancer",
+      "elasticloadbalancing:CreateListener",
     ]
   }
 
@@ -142,11 +142,11 @@ data "aws_iam_policy_document" "container1" {
     resources = ["${var.container_app.ecs_cluster_arn}"]
 
     actions = [
+      "ecs:UntagResource",
+      "ecs:TagResource",
+      "ecs:ListTagsForResource",
       "ecs:DescribeClusters",
       "ecs:DeleteCluster",
-      "ecs:TagResource",
-      "ecs:UntagResource",
-      "ecs:ListTagsForResource"
     ]
   }
 }
@@ -159,13 +159,13 @@ data "aws_iam_policy_document" "container2" {
     effect    = "Allow"
     resources = ["${var.container_app.ecs_service_arn}"]
     actions = [
-      "ecs:CreateService",
-      "ecs:DescribeServices",
       "ecs:UpdateService",
-      "ecs:DeleteService",
-      "ecs:TagResource",
       "ecs:UntagResource",
-      "ecs:ListTagsForResource"
+      "ecs:TagResource",
+      "ecs:ListTagsForResource",
+      "ecs:DescribeServices",
+      "ecs:DeleteService",
+      "ecs:CreateService",
     ]
   }
 
@@ -177,12 +177,12 @@ data "aws_iam_policy_document" "container2" {
       "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:/${var.application_name}/*/*"
     ]
     actions = [
-      "secretsmanager:GetSecretValue",
-      "secretsmanager:CreateSecret",
-      "secretsmanager:PutSecretValue",
       "secretsmanager:UpdateSecret",
-      "secretsmanager:DescribeSecret",
       "secretsmanager:TagResource",
+      "secretsmanager:PutSecretValue",
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:CreateSecret",
     ]
   }
 
@@ -191,8 +191,8 @@ data "aws_iam_policy_document" "container2" {
     effect    = "Allow"
     resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:/github/access_credentials-*"]
     actions   = [
+      "secretsmanager:GetResourcePolicy",
       "secretsmanager:DescribeSecret",
-      "secretsmanager:GetResourcePolicy"
     ]
   }
 }
