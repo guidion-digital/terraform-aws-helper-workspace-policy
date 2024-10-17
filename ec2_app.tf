@@ -39,6 +39,7 @@ data "aws_iam_policy_document" "ec2_1" {
     actions = [
       "route53:AssociateVPCWithHostedZone",
       "iam:TagRole",
+      "iam:TagInstanceProfile",
       "iam:ListRolePolicies",
       "iam:ListAttachedRolePolicies",
       "iam:GetRole",
