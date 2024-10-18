@@ -97,6 +97,7 @@ data "aws_iam_policy_document" "ec2_1" {
       "ec2:AuthorizeSecurityGroupEgress",
       "ec2:AssociateRouteTable",
       "ec2:AssociateIamInstanceProfile",
+      "iam:DeleteInstanceProfile",
     ]
   }
 }
