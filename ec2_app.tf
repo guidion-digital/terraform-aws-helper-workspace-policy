@@ -36,21 +36,10 @@ data "aws_iam_policy_document" "ec2_1" {
     effect    = "Allow"
     resources = ["*"]
 
-    actions = [
+    actions = [      
+      "sts:GetCallerIdentity",
       "route53:AssociateVPCWithHostedZone",
-      "iam:TagRole",
-      "iam:TagInstanceProfile",
-      "iam:ListRolePolicies",
-      "iam:ListAttachedRolePolicies",
-      "iam:GetRole",
-      "iam:GetInstanceProfile",
-      "iam:CreateRole",
-      "iam:CreateInstanceProfile",
-      "iam:AttachRolePolicy",
-      "iam:AddRoleToInstanceProfile",
       "ec2:TerminateInstances",
-      "ec2:StopInstances",
-      "ec2:StartInstances",
       "ec2:RunInstances",
       "ec2:RevokeSecurityGroupIngress",
       "ec2:RevokeSecurityGroupEgress",
@@ -77,8 +66,8 @@ data "aws_iam_policy_document" "ec2_1" {
       "ec2:DescribeInstances",
       "ec2:DescribeInstanceCreditSpecifications",
       "ec2:DescribeInstanceAttribute",
-      "ec2:DescribeIamInstanceProfileAssociations",
       "ec2:DescribeAvailabilityZones",
+      "ec2:DeleteVpcEndpoints",
       "ec2:DeleteVpc",
       "ec2:DeleteTransitGatewayVpcAttachment",
       "ec2:DeleteSubnet",
@@ -96,8 +85,6 @@ data "aws_iam_policy_document" "ec2_1" {
       "ec2:AuthorizeSecurityGroupIngress",
       "ec2:AuthorizeSecurityGroupEgress",
       "ec2:AssociateRouteTable",
-      "ec2:AssociateIamInstanceProfile",
-      "iam:DeleteInstanceProfile",
     ]
   }
 }
