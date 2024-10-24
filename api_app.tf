@@ -380,11 +380,31 @@ data "aws_iam_policy_document" "api2" {
   }
 }
 
+data "aws_iam_policy_document" "api3" {
+  count = var.api_app != null ? 1 : 0
+
+  statement {
+    sid     = "route0"
+    effect  = "Allow"
+    actions = ["geo:*"]
+
+    resources = [
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:route-calculator/applications/${var.application_name}/*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:geofence-collection/applications/${var.application_name}/*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:api-key/applications/${var.application_name}/*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:map/applications/${var.application_name}/*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:tracker/applications/${var.application_name}/*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:place-index/applications/${var.application_name}/*"
+    ]
+  }
+}
+
 resource "aws_iam_policy" "api_app_policies" {
   for_each = var.api_app != null ? {
     "api-app0" = data.aws_iam_policy_document.api0,
     "api-app1" = data.aws_iam_policy_document.api1,
-    "api-app2" = data.aws_iam_policy_document.api2
+    "api-app2" = data.aws_iam_policy_document.api2,
+    "api-app3" = data.aws_iam_policy_document.api3
   } : {}
 
   name   = "${var.application_name}-${each.key}"
