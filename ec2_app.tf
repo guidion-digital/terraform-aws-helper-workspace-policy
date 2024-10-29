@@ -40,6 +40,8 @@ data "aws_iam_policy_document" "ec2_1" {
       "sts:GetCallerIdentity",
       "route53:AssociateVPCWithHostedZone",
       "ec2:TerminateInstances",
+      "ec2:StopInstances",
+      "ec2:StartInstances",
       "ec2:RunInstances",
       "ec2:RevokeSecurityGroupIngress",
       "ec2:RevokeSecurityGroupEgress",
