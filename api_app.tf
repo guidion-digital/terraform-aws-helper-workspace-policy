@@ -389,12 +389,12 @@ data "aws_iam_policy_document" "api3" {
     actions = ["geo:*"]
 
     resources = [
-      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:route-calculator/applications/${var.application_name}/*",
-      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:geofence-collection/applications/${var.application_name}/*",
-      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:api-key/applications/${var.application_name}/*",
-      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:map/applications/${var.application_name}/*",
-      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:tracker/applications/${var.application_name}/*",
-      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:place-index/applications/${var.application_name}/*"
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:route-calculator/${var.application_name}*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:geofence-collection/${var.application_name}*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:api-key/${var.application_name}*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:map/${var.application_name}*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:tracker/${var.application_name}*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:place-index/${var.application_name}*"
     ]
   }
 }
