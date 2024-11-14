@@ -298,6 +298,24 @@ data "aws_iam_policy_document" "lambda3" {
   count = var.lambda_app != null ? 1 : 0
 
   statement {
+    sid       = "secrets0"
+    effect    = "Allow"
+    resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:api-keys/${var.application_name}/*"]
+    actions = [
+      "secretsmanager:PutSecretValue",
+      "secretsmanager:PutResourcePolicy",
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:GetResourcePolicy",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:DeleteSecret",
+      "secretsmanager:CreateSecret",
+      "secretsmanager:TagResource",
+      "secretsmanager:UntagResource"
+    ]
+  }
+
+
+  statement {
     sid     = "route0"
     effect  = "Allow"
     actions = ["geo:*"]
