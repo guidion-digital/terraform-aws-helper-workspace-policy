@@ -120,13 +120,6 @@ data "aws_iam_policy_document" "lambda0" {
   }
 
   statement {
-    sid       = "sts0"
-    effect    = "Allow"
-    resources = ["${var.domain_account_role}"]
-    actions   = ["sts:AssumeRole"]
-  }
-
-  statement {
     sid       = "logs0"
     effect    = "Allow"
     resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.application_name}-*"]
