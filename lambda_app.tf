@@ -325,10 +325,10 @@ data "aws_iam_policy_document" "lambda3" {
 
 resource "aws_iam_policy" "lambda_app_policies" {
   for_each = var.lambda_app != null ? {
-    "api-app0" = data.aws_iam_policy_document.lambda0,
-    "api-app1" = data.aws_iam_policy_document.lambda1,
-    "api-app2" = data.aws_iam_policy_document.lambda2,
-    "api-app3" = data.aws_iam_policy_document.lambda3
+    "lambda-app0" = data.aws_iam_policy_document.lambda0,
+    "lambda-app1" = data.aws_iam_policy_document.lambda1,
+    "lambda-app2" = data.aws_iam_policy_document.lambda2,
+    "lambda-app3" = data.aws_iam_policy_document.lambda3
   } : {}
 
   name   = "${var.application_name}-${each.key}"
@@ -336,7 +336,7 @@ resource "aws_iam_policy" "lambda_app_policies" {
   policy = one(each.value).json
 }
 
-output "api_type_policy_arns" {
+output "lambda_type_policy_arns" {
   description = "Will have a value if the application type was 'lambda_app'"
   value       = [for this_policy in aws_iam_policy.lambda_app_policies : this_policy.arn]
 }
