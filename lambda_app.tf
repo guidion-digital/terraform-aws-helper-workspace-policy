@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "lambda0" {
     actions   = ["sns:*"]
   }
 
-  # FIXME
+  # FIXME: Too permissive
   statement {
     sid       = "sqs0"
     effect    = "Allow"
@@ -87,7 +87,7 @@ data "aws_iam_policy_document" "lambda0" {
     ]
   }
 
-  # FIXME
+  # FIXME: Too permissive
   statement {
     sid       = "ec22"
     effect    = "Allow"
@@ -236,6 +236,23 @@ data "aws_iam_policy_document" "lambda2" {
   }
 
   statement {
+    sid       = "secrets0"
+    effect    = "Allow"
+    resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:api-keys/${var.application_name}/*"]
+    actions = [
+      "secretsmanager:PutSecretValue",
+      "secretsmanager:PutResourcePolicy",
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:GetResourcePolicy",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:DeleteSecret",
+      "secretsmanager:CreateSecret",
+      "secretsmanager:TagResource",
+      "secretsmanager:UntagResource"
+    ]
+  }
+
+  statement {
     sid       = "lambda0"
     effect    = "Allow"
     resources = ["arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:${var.application_name}-*"]
@@ -285,58 +302,33 @@ data "aws_iam_policy_document" "lambda2" {
     actions = ["lambda:GetEventSourceMapping"]
   }
 
-  # FIXME
-  statement {
-    sid       = "cloudfront0"
-    effect    = "Allow"
-    resources = ["*"]
-    actions   = ["cloudfront:*"]
-  }
 }
 
 data "aws_iam_policy_document" "lambda3" {
   count = var.lambda_app != null ? 1 : 0
 
   statement {
-    sid       = "secrets0"
-    effect    = "Allow"
-    resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:api-keys/${var.application_name}/*"]
-    actions = [
-      "secretsmanager:PutSecretValue",
-      "secretsmanager:PutResourcePolicy",
-      "secretsmanager:GetSecretValue",
-      "secretsmanager:GetResourcePolicy",
-      "secretsmanager:DescribeSecret",
-      "secretsmanager:DeleteSecret",
-      "secretsmanager:CreateSecret",
-      "secretsmanager:TagResource",
-      "secretsmanager:UntagResource"
-    ]
-  }
-
-
-  statement {
-    sid     = "route0"
+    sid     = "geo0"
     effect  = "Allow"
     actions = ["geo:*"]
 
     resources = [
-      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:route-calculator/applications/${var.application_name}/*",
-      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:geofence-collection/applications/${var.application_name}/*",
-      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:api-key/applications/${var.application_name}/*",
-      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:map/applications/${var.application_name}/*",
-      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:tracker/applications/${var.application_name}/*",
-      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:place-index/applications/${var.application_name}/*"
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:route-calculator/${var.application_name}*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:geofence-collection/${var.application_name}*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:api-key/${var.application_name}*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:map/${var.application_name}*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:tracker/${var.application_name}*",
+      "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:place-index/${var.application_name}*"
     ]
   }
 }
 
 resource "aws_iam_policy" "lambda_app_policies" {
   for_each = var.lambda_app != null ? {
-    "api-app0" = data.aws_iam_policy_document.lambda0,
-    "api-app1" = data.aws_iam_policy_document.lambda1,
-    "api-app2" = data.aws_iam_policy_document.lambda2,
-    "api-app3" = data.aws_iam_policy_document.lambda3
+    "lambda-app0" = data.aws_iam_policy_document.lambda0,
+    "lambda-app1" = data.aws_iam_policy_document.lambda1,
+    "lambda-app2" = data.aws_iam_policy_document.lambda2,
+    "lambda-app3" = data.aws_iam_policy_document.lambda3
   } : {}
 
   name   = "${var.application_name}-${each.key}"
