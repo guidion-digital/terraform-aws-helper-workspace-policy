@@ -10,4 +10,5 @@ module "workspace_user_permissions" {
   api_app       = null
   container_app = null
   ec2_app       = null
+  s3_app        = null
 }
