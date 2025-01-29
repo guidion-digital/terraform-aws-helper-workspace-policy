@@ -119,6 +119,31 @@ output "ssm_parameters_policy_arn" {
   value       = aws_iam_policy.ssm_parameters.arn
 }
 
+data "aws_iam_policy_document" "s3_bucket" {
+  statement {
+    sid    = "allowwrites"
+    effect = "Allow"
+    resources = [
+      "arn:aws:s3:::${var.application_name}-${data.aws_caller_identity.current.account_id}",
+      "arn:aws:s3:::${var.application_name}-${data.aws_caller_identity.current.account_id}/*"
+    ]
+    actions = [
+      "s3:*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "s3_bucket" {
+  name   = "${var.application_name}-s3-bucket"
+  path   = "/tfe/"
+  policy = data.aws_iam_policy_document.s3_bucket.json
+}
+
+output "s3_bucket_policy_arn" {
+  description = "Allows read/write for application namepsaced SSM parameters"
+  value       = aws_iam_policy.s3_bucket.arn
+}
+
 data "aws_iam_policy_document" "common" {
   statement {
     sid       = "allowreads"
