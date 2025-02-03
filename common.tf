@@ -144,6 +144,89 @@ output "s3_bucket_policy_arn" {
   value       = aws_iam_policy.s3_bucket.arn
 }
 
+data "aws_iam_policy_document" "elasticache" {
+  statement {
+    sid       = "elasticachecrud0"
+    effect    = "Allow"
+    resources = ["arn:aws:elasticache:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:cluster:${var.application_name}-*"]
+    actions = [
+      "elasticache:RemoveTagsFromResource",
+      "elasticache:DeleteCacheCluster",
+      "elasticache:AddTagsToResource",
+      "elasticache:CreateCacheSubnetGroup",
+      "elasticache:ModifyCacheCluster",
+      "elasticache:CreateCacheCluster"
+    ]
+  }
+
+  statement {
+    sid    = "cacheresrouces0"
+    effect = "Allow"
+    resources = [
+      "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:security-group/applications/${var.application_name}/*",
+      "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:subnet/applications/${var.application_name}/*",
+      "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:network-interface/applications/${var.application_name}/*",
+      "arn:aws:elasticache:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:cluster:/applications/${var.application_name}/*",
+      "arn:aws:elasticache:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:serverlesscache:/applications/${var.application_name}/*",
+      "arn:aws:elasticache:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parametergroup:${var.application_name}-*",
+      "arn:aws:elasticache:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:serverlesscachesnapshot:/applications/${var.application_name}/*",
+      "arn:aws:elasticache:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:reserved-instance:/applications/${var.application_name}/*",
+      "arn:aws:elasticache:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:user:/applications/${var.application_name}/*",
+      "arn:aws:elasticache:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:securitygroup:/applications/${var.application_name}/*",
+      "arn:aws:elasticache:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:replicationgroup:/applications/${var.application_name}/*",
+      "arn:aws:elasticache:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:snapshot:/applications/${var.application_name}/*",
+      "arn:aws:elasticache:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:usergroup:/applications/${var.application_name}/*",
+      "arn:aws:elasticache:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:subnetgroup:${var.application_name}-*"
+    ]
+    actions = [
+      "elasticache:RemoveTagsFromResource",
+      "ec2:CreateTags",
+      "ec2:DeleteNetworkInterface",
+      "elasticache:DeleteCacheCluster",
+      "elasticache:AddTagsToResource",
+      "elasticache:DeleteCacheSecurityGroup",
+      "ec2:CreateNetworkInterface",
+      "elasticache:CreateCacheSubnetGroup",
+      "elasticache:ModifyCacheCluster",
+      "elasticache:DeleteCacheParameterGroup",
+      "elasticache:CreateCacheCluster",
+      "elasticache:DeleteCacheSubnetGroup",
+      "elasticache:ModifyCacheSubnetGroup",
+      "elasticache:CreateCacheParameterGroup"
+    ]
+  }
+
+  statement {
+    sid       = "describe0"
+    effect    = "Allow"
+    resources = ["*"]
+    actions = [
+      "ec2:DescribeNetworkInterfaces",
+      "ec2:DescribeVpcs",
+      "ec2:DescribeSubnets",
+      "ec2:DescribeSecurityGroups",
+      "elasticache:DescribeCacheSubnetGroups",
+      "elasticache:DescribeCacheParameterGroups",
+      "elasticache:DescribeCacheClusters",
+      "elasticache:DescribeEngineDefaultParameters",
+      "elasticache:DescribeCacheSecurityGroups",
+      "elasticache:DescribeCacheParameters",
+      "elasticache:ListTagsForResource"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "elasticache" {
+  name   = "${var.application_name}-elasticache"
+  path   = "/tfe/"
+  policy = data.aws_iam_policy_document.elasticache.json
+}
+
+output "elasticache_policy_arn" {
+  description = "Allows read/write for application namepsaced elasticache"
+  value       = aws_iam_policy.elasticache.arn
+}
+
 data "aws_iam_policy_document" "common" {
   statement {
     sid       = "allowreads"
