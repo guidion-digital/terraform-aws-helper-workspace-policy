@@ -157,9 +157,13 @@ data "aws_iam_policy_document" "api0" {
   }
 
   statement {
-    sid       = "logs0"
-    effect    = "Allow"
-    resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.application_name}-*"]
+    sid    = "logs0"
+    effect = "Allow"
+    resources = [
+      "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.application_name}-*",
+      "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/rds/proxy/${var.application_name}-*",
+      "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/rds/${var.application_name}-*:log-stream:*"
+    ]
     actions = [
       "logs:DescribeSubscriptionFilters",
       "logs:PutSubscriptionFilter",
@@ -167,8 +171,14 @@ data "aws_iam_policy_document" "api0" {
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
       "logs:DeleteLogGroup",
-      "logs:ListTagsLogGroup"
+      "logs:ListTagsLogGroup",
+      "logs:ListTagsForResource",
+      "logs:TagResource",
+      "logs:UntagResource",
+      "logs:PutRetentionPolicy"
     ]
   }
 
@@ -295,9 +305,12 @@ data "aws_iam_policy_document" "api2" {
   }
 
   statement {
-    sid       = "lambda0"
-    effect    = "Allow"
-    resources = ["arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:${var.application_name}-*"]
+    sid    = "lambda0"
+    effect = "Allow"
+    resources = [
+      "arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:${var.application_name}-*",
+      "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:event-source-mapping:*"
+    ]
 
     actions = [
       "lambda:DeleteFunctionConcurrency",
@@ -312,7 +325,8 @@ data "aws_iam_policy_document" "api2" {
       "lambda:CreateFunction",
       "lambda:AddPermission",
       "lambda:PutFunctionConcurrency",
-      "lambda:TagResource"
+      "lambda:TagResource",
+      "lambda:ListTags"
     ]
   }
 
@@ -378,10 +392,6 @@ data "aws_iam_policy_document" "api2" {
 
     actions = ["apigateway:*"]
   }
-}
-
-data "aws_iam_policy_document" "api3" {
-  count = var.api_app != null ? 1 : 0
 
   statement {
     sid     = "route0"
@@ -397,14 +407,99 @@ data "aws_iam_policy_document" "api3" {
       "arn:aws:geo:*:${data.aws_caller_identity.current.account_id}:place-index/${var.application_name}*"
     ]
   }
+
+  statement {
+    sid    = "rds0"
+    effect = "Allow"
+    actions = [
+      "rds:*",
+      "iam:CreateRole",
+      "iam:GetRole",
+      "iam:TagRole",
+      "iam:DeleteRole",
+      "iam:DeleteRolePolicy",
+      "iam:DeleteUser",
+      "iam:DeleteUserPolicy",
+      "iam:DeleteGroup",
+      "iam:DeleteGroupPolicy",
+      "iam:ListRolePolicies",
+      "iam:ListAttachedRolePolicies",
+      "iam:ListUserPolicies",
+      "iam:ListGroupPolicies",
+      "iam:ListUserTags",
+      "iam:ListGroupTags",
+      "iam:ListRoleTags",
+      "iam:ListUserTags",
+      "iam:PutRolePolicy",
+      "iam:GetRolePolicy",
+      "iam:PassRole"
+    ]
+
+    resources = [
+      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:subgrp:${var.application_name}*",
+      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db:${var.application_name}*",
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.application_name}*",
+      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:pg:${var.application_name}*",
+      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db-proxy:${var.application_name}*",
+      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:og:${var.application_name}*",
+      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:snapshot:${var.application_name}*"
+    ]
+  }
+
+  statement {
+    sid    = "rds1"
+    effect = "Allow"
+    actions = [
+      "rds:DescribeDBInstances"
+    ]
+
+    resources = [
+      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db:*"
+    ]
+  }
+
+  statement {
+    sid    = "rds2"
+    effect = "Allow"
+    actions = [
+      "rds:CreateDBProxy",
+      "rds:DeleteDBProxy",
+      "rds:DescribeDBProxies",
+      "rds:DescribeDBProxyTargetGroups",
+      "rds:DescribeDBProxyTargets",
+      "rds:DescribeDBProxies",
+      "rds:AddTagsToResource",
+      "rds:ListTagsForResource",
+      "rds:RemoveTagsFromResource",
+      "rds:TagResource",
+      "rds:UntagResource",
+      "rds:UpdateDBProxy",
+      "rds:UpdateDBProxyTargetGroup",
+      "rds:UpdateDBProxyTarget",
+      "rds:UpdateDBProxyEndpoint",
+      "rds:CreateDBProxyEndpoint",
+      "rds:ModifyDBProxyTargetGroup",
+      "rds:DeleteDBProxyEndpoint",
+      "rds:DeleteDBProxyTargetGroup",
+      "rds:CreateDBProxyTargetGroup",
+      "rds:DescribeDBProxyEndpoints",
+      "rds:RegisterDBProxyTargets"
+    ]
+
+    resources = [
+      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db-proxy:*",
+      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db-proxy-endpoint:*",
+      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db-proxy-target-group:*",
+      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:target-group:*"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "api_app_policies" {
   for_each = var.api_app != null ? {
     "api-app0" = data.aws_iam_policy_document.api0,
     "api-app1" = data.aws_iam_policy_document.api1,
-    "api-app2" = data.aws_iam_policy_document.api2,
-    "api-app3" = data.aws_iam_policy_document.api3
+    "api-app2" = data.aws_iam_policy_document.api2
   } : {}
 
   name   = "${var.application_name}-${each.key}"

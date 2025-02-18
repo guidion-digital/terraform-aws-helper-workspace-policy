@@ -246,9 +246,12 @@ data "aws_iam_policy_document" "lambda2" {
   }
 
   statement {
-    sid       = "lambda0"
-    effect    = "Allow"
-    resources = ["arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:${var.application_name}-*"]
+    sid    = "lambda0"
+    effect = "Allow"
+    resources = [
+      "arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:${var.application_name}-*",
+      "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:event-source-mapping:*"
+    ]
 
     actions = [
       "lambda:DeleteFunctionConcurrency",
@@ -263,7 +266,8 @@ data "aws_iam_policy_document" "lambda2" {
       "lambda:CreateFunction",
       "lambda:AddPermission",
       "lambda:PutFunctionConcurrency",
-      "lambda:TagResource"
+      "lambda:TagResource",
+      "lambda:ListTags"
     ]
   }
 
