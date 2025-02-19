@@ -432,7 +432,8 @@ data "aws_iam_policy_document" "api2" {
       "iam:ListUserTags",
       "iam:PutRolePolicy",
       "iam:GetRolePolicy",
-      "iam:PassRole"
+      "iam:PassRole",
+      "iam:ListInstanceProfilesForRole"
     ]
 
     resources = [
@@ -483,7 +484,8 @@ data "aws_iam_policy_document" "api2" {
       "rds:DeleteDBProxyTargetGroup",
       "rds:CreateDBProxyTargetGroup",
       "rds:DescribeDBProxyEndpoints",
-      "rds:RegisterDBProxyTargets"
+      "rds:RegisterDBProxyTargets",
+      "rds:DeregisterDBProxyTargets"
     ]
 
     resources = [
