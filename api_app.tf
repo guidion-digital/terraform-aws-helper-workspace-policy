@@ -269,7 +269,7 @@ data "aws_iam_policy_document" "api2" {
       "kms:GenerateDataKey",
       "kms:DescribeKey",
       "kms:Decrypt",
-      "kms:CreateGrant",
+      "kms:CreateGrant"
     ]
   }
 
@@ -283,7 +283,7 @@ data "aws_iam_policy_document" "api2" {
       "route53:ListHostedZones",
       "route53:GetChange",
       "route53:CreateHostedZone",
-      "acm:DescribeCertificate",
+      "acm:DescribeCertificate"
     ]
   }
 
@@ -311,7 +311,6 @@ data "aws_iam_policy_document" "api2" {
       "arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:${var.application_name}-*",
       "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:event-source-mapping:*"
     ]
-
     actions = [
       "lambda:DeleteFunctionConcurrency",
       "lambda:UpdateFunctionConfiguration",
@@ -330,7 +329,6 @@ data "aws_iam_policy_document" "api2" {
     ]
   }
 
-  # FIXME: events:*
   statement {
     sid       = "lambda1"
     effect    = "Allow"
@@ -358,7 +356,6 @@ data "aws_iam_policy_document" "api2" {
     actions = ["lambda:GetEventSourceMapping"]
   }
 
-  # FIXME
   statement {
     sid       = "cloudfront0"
     effect    = "Allow"
@@ -379,22 +376,19 @@ data "aws_iam_policy_document" "api2" {
     effect = "Allow"
 
     resources = [
-      "arn:aws:apigateway:*::/usageplans/*",
-      # FIXME: There's no way to know the API ID ahead of time, so we give access
-      #        to all API IDs :(
       "arn:aws:apigateway:*::/restapis/*/stages/*",
+      "arn:aws:apigateway:*::/usageplans/*",
       "arn:aws:apigateway:*::/restapis/*/stages/*/sdks/*",
       "arn:aws:apigateway:*::/restapis/*/resources/*/methods/*/responses/*",
       "arn:aws:apigateway:*::/restapis/*/resources/*/methods/*",
       "arn:aws:apigateway:*::/domainnames/*",
-      "arn:aws:apigateway:*::/*",
+      "arn:aws:apigateway:*::/*"
     ]
-
     actions = ["apigateway:*"]
   }
 
   statement {
-    sid     = "route0"
+    sid     = "geo0"
     effect  = "Allow"
     actions = ["geo:*"]
 
@@ -409,37 +403,13 @@ data "aws_iam_policy_document" "api2" {
   }
 
   statement {
-    sid    = "rds0"
-    effect = "Allow"
-    actions = [
-      "rds:*",
-      "iam:CreateRole",
-      "iam:GetRole",
-      "iam:TagRole",
-      "iam:DeleteRole",
-      "iam:DeleteRolePolicy",
-      "iam:DeleteUser",
-      "iam:DeleteUserPolicy",
-      "iam:DeleteGroup",
-      "iam:DeleteGroupPolicy",
-      "iam:ListRolePolicies",
-      "iam:ListAttachedRolePolicies",
-      "iam:ListUserPolicies",
-      "iam:ListGroupPolicies",
-      "iam:ListUserTags",
-      "iam:ListGroupTags",
-      "iam:ListRoleTags",
-      "iam:ListUserTags",
-      "iam:PutRolePolicy",
-      "iam:GetRolePolicy",
-      "iam:PassRole",
-      "iam:ListInstanceProfilesForRole"
-    ]
+    sid     = "rds0"
+    effect  = "Allow"
+    actions = ["rds:*"]
 
     resources = [
       "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:subgrp:${var.application_name}*",
       "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db:${var.application_name}*",
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.application_name}*",
       "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:pg:${var.application_name}*",
       "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db-proxy:${var.application_name}*",
       "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:og:${var.application_name}*",
@@ -472,20 +442,27 @@ data "aws_iam_policy_document" "api2" {
       "rds:AddTagsToResource",
       "rds:ListTagsForResource",
       "rds:RemoveTagsFromResource",
-      "rds:TagResource",
-      "rds:UntagResource",
-      "rds:UpdateDBProxy",
-      "rds:UpdateDBProxyTargetGroup",
-      "rds:UpdateDBProxyTarget",
-      "rds:UpdateDBProxyEndpoint",
-      "rds:CreateDBProxyEndpoint",
-      "rds:ModifyDBProxyTargetGroup",
-      "rds:DeleteDBProxyEndpoint",
-      "rds:DeleteDBProxyTargetGroup",
-      "rds:CreateDBProxyTargetGroup",
       "rds:DescribeDBProxyEndpoints",
+      "rds:DescribeDBProxyEndpoints",
+      "rds:DescribeDBProxyTargetGroups",
+      "rds:DescribeDBProxyTargets",
+      "rds:CreateDBProxy",
+      "rds:CreateDBProxyEndpoint",
+      "rds:DeleteDBProxyEndpoint",
+      "rds:DeregisterDBProxyTargets",
+      "rds:ModifyDBProxy",
+      "rds:ModifyDBProxyEndpoint",
+      "rds:ModifyDBProxyTargetGroup",
       "rds:RegisterDBProxyTargets",
-      "rds:DeregisterDBProxyTargets"
+      "rds:DescribeDBProxyTargetGroups",
+      "rds:ModifyDBProxyTargetGroup",
+      "rds:RegisterDBProxyTargets",
+      "rds:ModifyDBProxyTargetGroup",
+      "rds:ListTagsForResource",
+      "rds:DeregisterDBProxyTargets",
+      "rds:DeleteDBProxyEndpoint",
+      "rds:DeleteDBProxy",
+      "rds:CreateDBProxyEndpoint"
     ]
 
     resources = [
@@ -494,6 +471,23 @@ data "aws_iam_policy_document" "api2" {
       "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db-proxy-target-group:*",
       "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:target-group:*"
     ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "iam:GetRole",
+      "iam:ListRolePolicies",
+      "iam:ListAttachedRolePolicies",
+      "iam:ListUserPolicies",
+      "iam:ListGroupPolicies",
+      "iam:ListUserTags",
+      "iam:ListRoleTags",
+      "iam:ListUserTags",
+      "iam:GetRolePolicy",
+      "iam:ListInstanceProfilesForRole"
+    ]
+    resources = ["arn:aws:iam::001903534230:role/api-app-x*"]
   }
 }
 
