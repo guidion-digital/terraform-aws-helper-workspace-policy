@@ -487,7 +487,9 @@ data "aws_iam_policy_document" "api2" {
       "iam:GetRolePolicy",
       "iam:ListInstanceProfilesForRole"
     ]
-    resources = ["arn:aws:iam::001903534230:role/api-app-x*"]
+    resources = [
+      "*"
+    ]
   }
 }
 
