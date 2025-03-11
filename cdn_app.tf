@@ -161,10 +161,12 @@ data "aws_iam_policy_document" "cdn2" {
   count = var.cdn_app != null ? 1 : 0
 
   statement {
-    sid       = "lambda"
-    effect    = "Allow"
-    resources = ["arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:${var.project}-${var.application_name}-originrequest"]
-    actions   = ["lambda:*"]
+    sid    = "lambda"
+    effect = "Allow"
+    resources = [
+      "arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:${var.project}-${var.application_name}-*"
+    ]
+    actions = ["lambda:*"]
   }
 
   statement {
