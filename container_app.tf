@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "container0" {
     resources = ["*"]
 
     actions = [
-      "iam:iam:ListAccountAliases",
+      "iam:ListAccountAliases",
       "sts:GetCallerIdentity",
       "secretsmanager:TagResource",
       "secretsmanager:ListSecrets",
