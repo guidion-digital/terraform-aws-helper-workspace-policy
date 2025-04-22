@@ -89,7 +89,8 @@ data "aws_iam_policy_document" "ec2_1" {
       "ec2:AssociateRouteTable",
       "ec2:DescribeImages",
       "ec2:ModifyInstanceMetadataOptions",
-      "ec2:ModifyVolume"
+      "ec2:ModifyVolume",
+      "ec2:DescribeVolumesModifications"
     ]
   }
 }
