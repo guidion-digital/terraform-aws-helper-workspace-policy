@@ -325,7 +325,9 @@ data "aws_iam_policy_document" "api2" {
       "lambda:AddPermission",
       "lambda:PutFunctionConcurrency",
       "lambda:TagResource",
-      "lambda:ListTags"
+      "lambda:ListTags",
+      "lambda:CreateAlias",
+      "lambda:GetAlias"
     ]
   }
 
