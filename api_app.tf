@@ -327,7 +327,10 @@ data "aws_iam_policy_document" "api2" {
       "lambda:TagResource",
       "lambda:ListTags",
       "lambda:CreateAlias",
-      "lambda:GetAlias"
+      "lambda:GetAlias",
+      "lambda:DeleteAlias",
+      "lambda:UpdateAlias",
+      "lambda:ListAliases"
     ]
   }
 
