@@ -330,7 +330,9 @@ data "aws_iam_policy_document" "api2" {
       "lambda:GetAlias",
       "lambda:DeleteAlias",
       "lambda:UpdateAlias",
-      "lambda:ListAliases"
+      "lambda:ListAliases",
+      "lambda:PublishVersion",
+      "lambda:GetFunctionConfiguration"
     ]
   }
 
