@@ -57,7 +57,7 @@ data "aws_iam_policy_document" "api0" {
   statement {
     sid       = "waf2"
     effect    = "Allow"
-    resources = ["arn:aws:wafv2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:regional/webacl/*/*"]
+    resources = ["arn:aws:wafv2:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:regional/webacl/*/*"]
     actions   = ["wafv2:GetWebACLForResource"]
   }
 
@@ -160,9 +160,9 @@ data "aws_iam_policy_document" "api0" {
     sid    = "logs0"
     effect = "Allow"
     resources = [
-      "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.application_name}-*",
-      "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/rds/proxy/${var.application_name}-*",
-      "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/rds/${var.application_name}-*:log-stream:*"
+      "arn:aws:logs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.application_name}-*",
+      "arn:aws:logs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/rds/proxy/${var.application_name}-*",
+      "arn:aws:logs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/rds/${var.application_name}-*:log-stream:*"
     ]
     actions = [
       "logs:DescribeSubscriptionFilters",
@@ -221,7 +221,7 @@ data "aws_iam_policy_document" "api1" {
     sid    = "appscalingread0"
     effect = "Allow"
     resources = [
-      "arn:aws:application-autoscaling:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:scalable-target/*"
+      "arn:aws:application-autoscaling:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:scalable-target/*"
     ]
     actions = [
       "application-autoscaling:DescribeScalableTargets",
@@ -236,7 +236,7 @@ data "aws_iam_policy_document" "api1" {
     effect = "Allow"
     # FIXME: We need to scope this down
     resources = [
-      "arn:aws:application-autoscaling:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:scalable-target/*"
+      "arn:aws:application-autoscaling:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:scalable-target/*"
     ]
     actions = [
       "application-autoscaling:RegisterScalableTarget",
@@ -290,7 +290,7 @@ data "aws_iam_policy_document" "api2" {
   statement {
     sid       = "secrets0"
     effect    = "Allow"
-    resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:api-keys/${var.application_name}/*"]
+    resources = ["arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:api-keys/${var.application_name}/*"]
     actions = [
       "secretsmanager:PutSecretValue",
       "secretsmanager:PutResourcePolicy",
@@ -309,7 +309,7 @@ data "aws_iam_policy_document" "api2" {
     effect = "Allow"
     resources = [
       "arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:${var.application_name}-*",
-      "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:event-source-mapping:*"
+      "arn:aws:lambda:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:event-source-mapping:*"
     ]
     actions = [
       "lambda:DeleteFunctionConcurrency",
@@ -415,12 +415,12 @@ data "aws_iam_policy_document" "api2" {
     actions = ["rds:*"]
 
     resources = [
-      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:subgrp:${var.application_name}*",
-      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db:${var.application_name}*",
-      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:pg:${var.application_name}*",
-      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db-proxy:${var.application_name}*",
-      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:og:${var.application_name}*",
-      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:snapshot:${var.application_name}*"
+      "arn:aws:rds:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:subgrp:${var.application_name}*",
+      "arn:aws:rds:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:db:${var.application_name}*",
+      "arn:aws:rds:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:pg:${var.application_name}*",
+      "arn:aws:rds:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:db-proxy:${var.application_name}*",
+      "arn:aws:rds:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:og:${var.application_name}*",
+      "arn:aws:rds:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:snapshot:${var.application_name}*"
     ]
   }
 
@@ -432,7 +432,7 @@ data "aws_iam_policy_document" "api2" {
     ]
 
     resources = [
-      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db:*"
+      "arn:aws:rds:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:db:*"
     ]
   }
 
@@ -473,10 +473,10 @@ data "aws_iam_policy_document" "api2" {
     ]
 
     resources = [
-      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db-proxy:*",
-      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db-proxy-endpoint:*",
-      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:db-proxy-target-group:*",
-      "arn:aws:rds:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:target-group:*"
+      "arn:aws:rds:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:db-proxy:*",
+      "arn:aws:rds:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:db-proxy-endpoint:*",
+      "arn:aws:rds:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:db-proxy-target-group:*",
+      "arn:aws:rds:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:target-group:*"
     ]
   }
 
