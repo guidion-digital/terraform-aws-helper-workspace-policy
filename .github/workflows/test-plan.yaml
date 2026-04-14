@@ -12,15 +12,15 @@ jobs:
       pull-requests: write
       contents: read
 
-  tests-plan:
+  tests-terraform:
     needs: test-workflow
-    uses: guidion-digital/terrappy/.github/workflows/tfc-test-helper-module-plan.yaml@v1
+    uses: guidion-digital/terrappy/.github/workflows/tfc-test-basic.yaml@v1
     permissions:
       contents: read
-      pull-requests: read
+      pull-requests: write
 
   release-dry-run:
-    needs: tests-plan
+    needs: [test-workflow, tests-terraform]
     uses: guidion-digital/release-workflows/.github/workflows/github-release-tag-dry-run.yaml@v2
     with:
       branch: ${{ github.ref_name }}
