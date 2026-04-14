@@ -149,7 +149,7 @@ data "aws_iam_policy_document" "lambda0" {
   statement {
     sid       = "serviceroles"
     effect    = "Allow"
-    resources = ["${var.application_role_arn}"]
+    resources = [var.application_role_arn]
     actions = [
       "iam:CreateServiceLinkedRole",
       "iam:DeleteServiceLinkedRole",

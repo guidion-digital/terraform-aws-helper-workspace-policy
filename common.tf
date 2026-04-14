@@ -3,18 +3,22 @@ data "aws_region" "current" {}
 
 variable "application_name" {
   description = "Name of the application. Will be used for naming resources"
+  type        = string
 }
 
 variable "application_role_arn" {
   description = "ARN of the IAM role used by the application"
+  type        = string
 }
 
 variable "domain_account_role" {
   description = "Role which can be assumed in another account in order to update DNS records"
+  type        = string
 }
 
 variable "project" {
   description = "Name of project (team)"
+  type        = string
 }
 
 data "aws_iam_policy_document" "secrets" {

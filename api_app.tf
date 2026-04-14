@@ -152,7 +152,7 @@ data "aws_iam_policy_document" "api0" {
   statement {
     sid       = "sts0"
     effect    = "Allow"
-    resources = ["${var.domain_account_role}"]
+    resources = [var.domain_account_role]
     actions   = ["sts:AssumeRole"]
   }
 
@@ -194,7 +194,7 @@ data "aws_iam_policy_document" "api0" {
   statement {
     sid       = "serviceroles"
     effect    = "Allow"
-    resources = ["${var.application_role_arn}"]
+    resources = [var.application_role_arn]
     actions = [
       "iam:CreateServiceLinkedRole",
       "iam:DeleteServiceLinkedRole",

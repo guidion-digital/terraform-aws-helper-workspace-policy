@@ -106,7 +106,7 @@ data "aws_iam_policy_document" "cdn0" {
   statement {
     sid       = "serviceroles"
     effect    = "Allow"
-    resources = ["${var.application_role_arn}"]
+    resources = [var.application_role_arn]
 
     actions = [
       "iam:CreateServiceLinkedRole",
@@ -140,7 +140,7 @@ data "aws_iam_policy_document" "cdn1" {
   statement {
     sid       = "sts"
     effect    = "Allow"
-    resources = ["${var.domain_account_role}"]
+    resources = [var.domain_account_role]
     actions   = ["sts:AssumeRole"]
   }
 
