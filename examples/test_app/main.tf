@@ -1,3 +1,7 @@
+provider "aws" {
+  region = "eu-central-1"
+}
+
 module "workspace_user_permissions" {
   source = "../../"
 

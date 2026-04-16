@@ -122,7 +122,7 @@ data "aws_iam_policy_document" "lambda0" {
   statement {
     sid       = "logs0"
     effect    = "Allow"
-    resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.application_name}-*"]
+    resources = ["arn:aws:logs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.application_name}-*"]
     actions = [
       "logs:DescribeSubscriptionFilters",
       "logs:PutSubscriptionFilter",
@@ -149,7 +149,7 @@ data "aws_iam_policy_document" "lambda0" {
   statement {
     sid       = "serviceroles"
     effect    = "Allow"
-    resources = ["${var.application_role_arn}"]
+    resources = [var.application_role_arn]
     actions = [
       "iam:CreateServiceLinkedRole",
       "iam:DeleteServiceLinkedRole",
@@ -176,7 +176,7 @@ data "aws_iam_policy_document" "lambda1" {
     sid    = "appscalingread0"
     effect = "Allow"
     resources = [
-      "arn:aws:application-autoscaling:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:scalable-target/*"
+      "arn:aws:application-autoscaling:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:scalable-target/*"
     ]
     actions = [
       "application-autoscaling:DescribeScalableTargets",
@@ -191,7 +191,7 @@ data "aws_iam_policy_document" "lambda1" {
     effect = "Allow"
     # FIXME: We need to scope this down
     resources = [
-      "arn:aws:application-autoscaling:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:scalable-target/*"
+      "arn:aws:application-autoscaling:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:scalable-target/*"
     ]
     actions = [
       "application-autoscaling:RegisterScalableTarget",
@@ -231,7 +231,7 @@ data "aws_iam_policy_document" "lambda2" {
   statement {
     sid       = "secrets0"
     effect    = "Allow"
-    resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:api-keys/${var.application_name}/*"]
+    resources = ["arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:api-keys/${var.application_name}/*"]
     actions = [
       "secretsmanager:PutSecretValue",
       "secretsmanager:PutResourcePolicy",
@@ -250,7 +250,7 @@ data "aws_iam_policy_document" "lambda2" {
     effect = "Allow"
     resources = [
       "arn:aws:lambda:*:${data.aws_caller_identity.current.account_id}:function:${var.application_name}-*",
-      "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:event-source-mapping:*"
+      "arn:aws:lambda:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:event-source-mapping:*"
     ]
 
     actions = [

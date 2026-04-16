@@ -23,7 +23,7 @@ data "aws_iam_policy_document" "container0" {
     content {
       sid       = "sts0"
       effect    = "Allow"
-      resources = ["${var.domain_account_role}"]
+      resources = [var.domain_account_role]
       actions   = ["sts:AssumeRole"]
     }
   }
@@ -140,7 +140,7 @@ data "aws_iam_policy_document" "container1" {
   statement {
     sid       = "cluster0"
     effect    = "Allow"
-    resources = ["${var.container_app.ecs_cluster_arn}"]
+    resources = [var.container_app.ecs_cluster_arn]
 
     actions = [
       "ecs:UntagResource",
@@ -158,7 +158,7 @@ data "aws_iam_policy_document" "container2" {
   statement {
     sid       = "service0"
     effect    = "Allow"
-    resources = ["${var.container_app.ecs_service_arn}"]
+    resources = [var.container_app.ecs_service_arn]
     actions = [
       "ecs:UpdateService",
       "ecs:UntagResource",
@@ -174,8 +174,8 @@ data "aws_iam_policy_document" "container2" {
     sid    = "secrets0"
     effect = "Allow"
     resources = [
-      "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:/${var.application_name}/*",
-      "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:/${var.application_name}/*/*"
+      "arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:/${var.application_name}/*",
+      "arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:/${var.application_name}/*/*"
     ]
     actions = [
       "secretsmanager:UpdateSecret",
@@ -190,7 +190,7 @@ data "aws_iam_policy_document" "container2" {
   statement {
     sid       = "secrets1"
     effect    = "Allow"
-    resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:/github/access_credentials-*"]
+    resources = ["arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:/github/access_credentials-*"]
     actions   = [
       "secretsmanager:GetResourcePolicy",
       "secretsmanager:DescribeSecret",

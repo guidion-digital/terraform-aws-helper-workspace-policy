@@ -106,7 +106,7 @@ data "aws_iam_policy_document" "cdn0" {
   statement {
     sid       = "serviceroles"
     effect    = "Allow"
-    resources = ["${var.application_role_arn}"]
+    resources = [var.application_role_arn]
 
     actions = [
       "iam:CreateServiceLinkedRole",
@@ -140,7 +140,7 @@ data "aws_iam_policy_document" "cdn1" {
   statement {
     sid       = "sts"
     effect    = "Allow"
-    resources = ["${var.domain_account_role}"]
+    resources = [var.domain_account_role]
     actions   = ["sts:AssumeRole"]
   }
 
@@ -203,7 +203,7 @@ data "aws_iam_policy_document" "cdn2" {
   statement {
     sid       = "waf2"
     effect    = "Allow"
-    resources = ["arn:aws:wafv2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:regional/webacl/*/*"]
+    resources = ["arn:aws:wafv2:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:regional/webacl/*/*"]
     actions   = ["wafv2:GetWebACLForResource"]
   }
 
