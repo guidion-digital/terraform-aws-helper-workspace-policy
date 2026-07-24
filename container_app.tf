@@ -46,6 +46,9 @@ data "aws_iam_policy_document" "container0" {
       "route53:ChangeResourceRecordSets",
       "logs:DeleteLogGroup",
       "logs:CreateLogGroup",
+      "logs:DescribeLogGroups",
+      "logs:ListTagsForResource",
+      "logs:PutRetentionPolicy",
       "elasticloadbalancing:DescribeTargetGroups",
       "elasticloadbalancing:DescribeTargetGroupAttributes",
       "elasticloadbalancing:DescribeTags",
@@ -219,4 +222,3 @@ output "generated_container_policy_1" {
   description = "The first container policy string that was generated. Used for testing"
   value       = one([for this_app in data.aws_iam_policy_document.container0 : this_app.json])
 }
-
