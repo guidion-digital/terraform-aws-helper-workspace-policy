@@ -41,7 +41,8 @@ manage ECS lifecycle event capture through EventBridge and CloudWatch Logs.
 Those permissions are for the Terraform workspace principal; they are not
 permissions for the ECS task role. EventBridge rule actions are scoped to the
 forwarded `container_app.ecs_event_capture_rule_arn`, and the new log-group
-tagging actions are scoped to the forwarded event log group ARN. These ARNs are
-required parts of the `container_app` handoff from the TFE workspace.
+tagging actions are scoped to the forwarded event log group ARN. These fields
+are optional for backwards compatibility with older TFE workspace modules; the
+event-capture statements are omitted when they are not supplied.
 The account-level CloudWatch Logs resource-policy actions remain scoped to `*`
 because those APIs do not support resource ARNs.

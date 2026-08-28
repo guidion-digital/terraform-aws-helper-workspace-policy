@@ -7,8 +7,8 @@ variable "container_app" {
     loadbalancer_listener_arn : string,
     ecs_cluster_arn : string,
     ecs_service_arn : string,
-    ecs_event_capture_rule_arn : string,
-    ecs_event_capture_log_group_arn : string
+    ecs_event_capture_rule_arn : optional(string, null),
+    ecs_event_capture_log_group_arn : optional(string, null)
   })
 
   default = null
@@ -103,33 +103,39 @@ data "aws_iam_policy_document" "container0" {
     ]
   }
 
-  statement {
-    sid       = "ecsEventCapture0"
-    effect    = "Allow"
-    resources = [var.container_app.ecs_event_capture_rule_arn]
+  dynamic "statement" {
+    for_each = var.container_app.ecs_event_capture_rule_arn != null ? [var.container_app.ecs_event_capture_rule_arn] : []
+    content {
+      sid       = "ecsEventCapture0"
+      effect    = "Allow"
+      resources = [statement.value]
 
-    actions = [
-      "events:DeleteRule",
-      "events:DescribeRule",
-      "events:ListTagsForResource",
-      "events:ListTargetsByRule",
-      "events:PutRule",
-      "events:PutTargets",
-      "events:RemoveTargets",
-      "events:TagResource",
-      "events:UntagResource",
-    ]
+      actions = [
+        "events:DeleteRule",
+        "events:DescribeRule",
+        "events:ListTagsForResource",
+        "events:ListTargetsByRule",
+        "events:PutRule",
+        "events:PutTargets",
+        "events:RemoveTargets",
+        "events:TagResource",
+        "events:UntagResource",
+      ]
+    }
   }
 
-  statement {
-    sid       = "ecsEventCaptureLogs0"
-    effect    = "Allow"
-    resources = [var.container_app.ecs_event_capture_log_group_arn]
+  dynamic "statement" {
+    for_each = var.container_app.ecs_event_capture_log_group_arn != null ? [var.container_app.ecs_event_capture_log_group_arn] : []
+    content {
+      sid       = "ecsEventCaptureLogs0"
+      effect    = "Allow"
+      resources = [statement.value]
 
-    actions = [
-      "logs:TagResource",
-      "logs:UntagResource",
-    ]
+      actions = [
+        "logs:TagResource",
+        "logs:UntagResource",
+      ]
+    }
   }
 
   statement {
