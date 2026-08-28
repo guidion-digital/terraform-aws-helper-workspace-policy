@@ -36,7 +36,7 @@ run "all_policies_returned" {
       targetgroup_arn                 = "arn:aws:elasticloadbalancing:eu-central-1:123456789012:targetgroup/foobar/*",
       loadbalancer_listener_arn       = "arn:aws:elasticloadbalancing:eu-central-1:123456789012:listener/net/foobar/*",
       ecs_cluster_arn                 = "arn:aws:ecs:eu-central-1:123456789012:cluster/foobar",
-      ecs_service_arn                 = "arn:aws:ecs:eu-central-1:123456789012:service/*/foobar-service"
+      ecs_service_arn                 = "arn:aws:ecs:eu-central-1:123456789012:service/*/foobar-service",
       ecs_event_capture_rule_arn      = "arn:aws:events:eu-central-1:123456789012:rule/ecs-event-capture-forwarded",
       ecs_event_capture_log_group_arn = "arn:aws:logs:eu-central-1:123456789012:log-group:/aws/events/ecs/containerinsights/foobar/performance",
       loadbalancers                   = ["arn:aws:elasticloadbalancing:eu-central-1:123456789012:loadbalancer/net/foobar/*"]
@@ -190,9 +190,7 @@ run "container_policies_returned_only" {
       targetgroup_arn                 = "arn:aws:elasticloadbalancing:eu-central-1:123456789012:targetgroup/foobar/*",
       loadbalancer_listener_arn       = "arn:aws:elasticloadbalancing:eu-central-1:123456789012:listener/net/foobar/*",
       ecs_cluster_arn                 = "arn:aws:ecs:eu-central-1:123456789012:cluster/foobar",
-      ecs_service_arn                 = "arn:aws:ecs:eu-central-1:123456789012:service/*/foobar-service",
-      ecs_event_capture_rule_arn      = "arn:aws:events:eu-central-1:123456789012:rule/ecs-event-capture-forwarded",
-      ecs_event_capture_log_group_arn = "arn:aws:logs:eu-central-1:123456789012:log-group:/aws/events/ecs/containerinsights/foobar/performance",
+      ecs_service_arn                 = "arn:aws:ecs:eu-central-1:123456789012:service/*/foobar-service"
       loadbalancers                   = ["arn:aws:elasticloadbalancing:eu-central-1:123456789012:loadbalancer/net/foobar/*"]
     }
   }
