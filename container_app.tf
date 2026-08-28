@@ -6,7 +6,9 @@ variable "container_app" {
     loadbalancers : list(string),
     loadbalancer_listener_arn : string,
     ecs_cluster_arn : string,
-    ecs_service_arn : string
+    ecs_service_arn : string,
+    ecs_event_capture_rule_arn : string,
+    ecs_event_capture_log_group_arn : string
   })
 
   default = null
@@ -47,8 +49,11 @@ data "aws_iam_policy_document" "container0" {
       "logs:DeleteLogGroup",
       "logs:CreateLogGroup",
       "logs:DescribeLogGroups",
+      "logs:DescribeResourcePolicies",
       "logs:ListTagsForResource",
+      "logs:PutResourcePolicy",
       "logs:PutRetentionPolicy",
+      "logs:DeleteResourcePolicy",
       "elasticloadbalancing:DescribeTargetGroups",
       "elasticloadbalancing:DescribeTargetGroupAttributes",
       "elasticloadbalancing:DescribeTags",
@@ -95,6 +100,35 @@ data "aws_iam_policy_document" "container0" {
       "ec2:AssociateRouteTable",
       "cloudformation:CreateResource",
       "cloudformation:*",
+    ]
+  }
+
+  statement {
+    sid       = "ecsEventCapture0"
+    effect    = "Allow"
+    resources = [var.container_app.ecs_event_capture_rule_arn]
+
+    actions = [
+      "events:DeleteRule",
+      "events:DescribeRule",
+      "events:ListTagsForResource",
+      "events:ListTargetsByRule",
+      "events:PutRule",
+      "events:PutTargets",
+      "events:RemoveTargets",
+      "events:TagResource",
+      "events:UntagResource",
+    ]
+  }
+
+  statement {
+    sid       = "ecsEventCaptureLogs0"
+    effect    = "Allow"
+    resources = [var.container_app.ecs_event_capture_log_group_arn]
+
+    actions = [
+      "logs:TagResource",
+      "logs:UntagResource",
     ]
   }
 
@@ -194,7 +228,7 @@ data "aws_iam_policy_document" "container2" {
     sid       = "secrets1"
     effect    = "Allow"
     resources = ["arn:aws:secretsmanager:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:secret:/github/access_credentials-*"]
-    actions   = [
+    actions = [
       "secretsmanager:GetResourcePolicy",
       "secretsmanager:DescribeSecret",
     ]
