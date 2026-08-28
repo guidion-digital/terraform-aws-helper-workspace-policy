@@ -24,7 +24,9 @@ In most cases, it is expected for the client code (the [S3 workspace](https://gi
     loadbalancers : list(string),
     loadbalancer_listener_arn : string,
     ecs_cluster_arn : string,
-    ecs_service_arn : string
+    ecs_service_arn : string,
+    ecs_event_capture_rule_arn : string,
+    ecs_event_capture_log_group_arn : string
   }
 
 ...
@@ -33,3 +35,13 @@ In most cases, it is expected for the client code (the [S3 workspace](https://gi
 in order to create permissions for a limited set of targetgroups, loadbalancers, etc.
 
 The ARNs are worked out in the workspace modules ([S3 workspace](https://github.com/GuidionOps/terraform-aws-infra-s3-workspaces/) and [TFE workspace](https://github.com/guidion-digital/terraform-tfe-infra-workspaces) from which this module is called.
+
+The `container_app` policy also includes the Terraform permissions required to
+manage ECS lifecycle event capture through EventBridge and CloudWatch Logs.
+Those permissions are for the Terraform workspace principal; they are not
+permissions for the ECS task role. EventBridge rule actions are scoped to the
+forwarded `container_app.ecs_event_capture_rule_arn`, and the new log-group
+tagging actions are scoped to the forwarded event log group ARN. These ARNs are
+required parts of the `container_app` handoff from the TFE workspace.
+The account-level CloudWatch Logs resource-policy actions remain scoped to `*`
+because those APIs do not support resource ARNs.
