@@ -73,7 +73,9 @@ run "all_policies_returned" {
         "logs:DeleteResourcePolicy",
         "logs:DescribeResourcePolicies",
         "logs:PutResourcePolicy",
+        "logs:TagLogGroup",
         "logs:TagResource",
+        "logs:UntagLogGroup",
         "logs:UntagResource",
         ] : contains(
         flatten([

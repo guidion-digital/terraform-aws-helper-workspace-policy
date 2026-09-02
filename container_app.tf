@@ -133,7 +133,9 @@ data "aws_iam_policy_document" "container0" {
 
       actions = [
         "logs:TagResource",
+        "logs:TagLogGroup",
         "logs:UntagResource",
+        "logs:UntagLogGroup",
       ]
     }
   }
