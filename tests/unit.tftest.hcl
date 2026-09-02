@@ -89,6 +89,13 @@ run "all_policies_returned" {
 
   assert {
     condition = anytrue([
+      for statement in jsondecode(module.workspace_user_permissions.generated_container_policy_1).Statement : statement.Sid == "ec20" && contains(statement.Action, "logs:TagResource")
+    ])
+    error_message = "The broad Terraform container policy must allow logs:TagResource for tagged log-group creation."
+  }
+
+  assert {
+    condition = anytrue([
       for statement in jsondecode(module.workspace_user_permissions.generated_container_policy_1).Statement : statement.Sid == "ecsEventCapture0" && statement.Resource != "*"
     ])
     error_message = "EventBridge ECS event-capture permissions must be scoped to the generated rule ARN."
