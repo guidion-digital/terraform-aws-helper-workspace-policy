@@ -1,7 +1,7 @@
 ---
 repo: guidion-digital/terraform-aws-helper-workspace-policy
 project_name: terraform-aws-helper-workspace-policy
-owner: UNSET — please set this
+owner: Cinfra
 domain: AWS infrastructure authorization
 criticality: medium
 summary: Terraform module providing AWS workspace policy helpers for API, CDN, container, EC2, and Lambda applications. It centralizes application-specific permissions used by infrastructure workspaces.
@@ -17,12 +17,12 @@ main_systems:
 last_reviewed: 2026-09-02
 review_confidence: medium
 generated_by: OpenAI
-validated_by: UNSET
+validated_by: Afraz
 ---
 
 ## Overview
 
-This repository contains Terraform definitions for AWS workspace policies. Policy logic is organized by application type in `api_app.tf`, `cdn_app.tf`, `container_app.tf`, `ec2_app.tf`, and `lambda_app.tf`, with shared definitions in `common.tf`.
+Reusable Terraform module for AWS workspace policies for use by the terraform-tfe-infra-workspaces module. Policy logic is organized by application type in `api_app.tf`, `cdn_app.tf`, `container_app.tf`, `ec2_app.tf`, and `lambda_app.tf`, with shared definitions in `common.tf`.
 
 Automated coverage includes Terraform unit tests under `tests/` and functional tests under `functional-tests/`.
 
