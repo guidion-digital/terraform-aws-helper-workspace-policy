@@ -48,6 +48,7 @@ data "aws_iam_policy_document" "container0" {
       "route53:ChangeResourceRecordSets",
       "logs:DeleteLogGroup",
       "logs:CreateLogGroup",
+      "logs:TagResource",
       "logs:DescribeLogGroups",
       "logs:DescribeResourcePolicies",
       "logs:ListTagsForResource",
