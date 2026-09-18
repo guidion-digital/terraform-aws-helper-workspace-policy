@@ -133,6 +133,9 @@ data "aws_iam_policy_document" "container0" {
       resources = [statement.value]
 
       actions = [
+        "logs:DeleteSubscriptionFilter",
+        "logs:DescribeSubscriptionFilters",
+        "logs:PutSubscriptionFilter",
         "logs:TagResource",
         "logs:TagLogGroup",
         "logs:UntagResource",
