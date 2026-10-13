@@ -64,6 +64,7 @@ data "aws_iam_policy_document" "container0" {
       "elasticloadbalancing:DescribeLoadBalancers",
       "elasticloadbalancing:DescribeLoadBalancerAttributes",
       "elasticloadbalancing:DescribeListeners",
+      "elasticloadbalancing:DescribeListenerAttributes",
       "ecs:RegisterTaskDefinition",
       "ecs:DescribeTaskDefinition",
       "ecs:DeregisterTaskDefinition",
