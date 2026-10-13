@@ -27,6 +27,7 @@ In most cases, it is expected for the client code (the [S3 workspace](https://gi
     ecs_service_arn : string,
     ecs_event_capture_rule_arn : string,
     ecs_event_capture_log_group_arn : string,
+    alb_loadbalancer_arn : optional(string),
     alb_targetgroup_arn : optional(string),
     alb_listener_arn : optional(string)
   }

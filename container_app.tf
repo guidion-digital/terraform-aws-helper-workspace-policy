@@ -9,6 +9,7 @@ variable "container_app" {
     ecs_service_arn : string,
     ecs_event_capture_rule_arn : optional(string, null),
     ecs_event_capture_log_group_arn : optional(string, null),
+    alb_loadbalancer_arn : optional(string, null),
     alb_targetgroup_arn : optional(string, null),
     alb_listener_arn : optional(string, null)
   })
@@ -200,6 +201,22 @@ data "aws_iam_policy_document" "container1" {
     ]
   }
 
+  dynamic "statement" {
+    for_each = var.container_app.alb_loadbalancer_arn != null ? [var.container_app.alb_loadbalancer_arn] : []
+    content {
+      sid       = "albLb0"
+      effect    = "Allow"
+      resources = [statement.value]
+
+      actions = [
+        "elasticloadbalancing:RemoveTags",
+        "elasticloadbalancing:SetSecurityGroups",
+        "elasticloadbalancing:SetSubnets",
+        "elasticloadbalancing:SetIpAddressType",
+      ]
+    }
+  }
+
   statement {
     sid       = "lblistener0"
     effect    = "Allow"
@@ -218,6 +235,7 @@ data "aws_iam_policy_document" "container1" {
         "elasticloadbalancing:AddTags",
         "elasticloadbalancing:DeleteListener",
         "elasticloadbalancing:ModifyListener",
+        "elasticloadbalancing:ModifyListenerAttributes",
         "elasticloadbalancing:RemoveTags",
       ]
     }
