@@ -26,7 +26,10 @@ In most cases, it is expected for the client code (the [S3 workspace](https://gi
     ecs_cluster_arn : string,
     ecs_service_arn : string,
     ecs_event_capture_rule_arn : string,
-    ecs_event_capture_log_group_arn : string
+    ecs_event_capture_log_group_arn : string,
+    alb_loadbalancer_arn : optional(string),
+    alb_targetgroup_arn : optional(string),
+    alb_listener_arn : optional(string)
   }
 
 ...
@@ -35,6 +38,11 @@ In most cases, it is expected for the client code (the [S3 workspace](https://gi
 in order to create permissions for a limited set of targetgroups, loadbalancers, etc.
 
 The ARNs are worked out in the workspace modules ([S3 workspace](https://github.com/GuidionOps/terraform-aws-infra-s3-workspaces/) and [TFE workspace](https://github.com/guidion-digital/terraform-tfe-infra-workspaces) from which this module is called.
+
+For an internal ALB, the TFE workspace module supplies the application-named
+load balancer, target group, and listener ARNs. The optional ALB fields scope
+target-group and listener permissions to those resources; existing NLB callers
+can omit them.
 
 The `container_app` policy also includes the Terraform permissions required to
 manage ECS lifecycle event capture through EventBridge and CloudWatch Logs.

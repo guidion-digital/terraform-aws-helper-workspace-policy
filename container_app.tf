@@ -8,7 +8,10 @@ variable "container_app" {
     ecs_cluster_arn : string,
     ecs_service_arn : string,
     ecs_event_capture_rule_arn : optional(string, null),
-    ecs_event_capture_log_group_arn : optional(string, null)
+    ecs_event_capture_log_group_arn : optional(string, null),
+    alb_loadbalancer_arn : optional(string, null),
+    alb_targetgroup_arn : optional(string, null),
+    alb_listener_arn : optional(string, null)
   })
 
   default = null
@@ -61,6 +64,7 @@ data "aws_iam_policy_document" "container0" {
       "elasticloadbalancing:DescribeLoadBalancers",
       "elasticloadbalancing:DescribeLoadBalancerAttributes",
       "elasticloadbalancing:DescribeListeners",
+      "elasticloadbalancing:DescribeListenerAttributes",
       "ecs:RegisterTaskDefinition",
       "ecs:DescribeTaskDefinition",
       "ecs:DeregisterTaskDefinition",
@@ -155,6 +159,24 @@ data "aws_iam_policy_document" "container0" {
       "elasticloadbalancing:CreateTargetGroup",
     ]
   }
+
+  dynamic "statement" {
+    for_each = var.container_app.alb_targetgroup_arn != null ? [var.container_app.alb_targetgroup_arn] : []
+    content {
+      sid       = "albTg0"
+      effect    = "Allow"
+      resources = [statement.value]
+
+      actions = [
+        "elasticloadbalancing:CreateTargetGroup",
+        "elasticloadbalancing:AddTags",
+        "elasticloadbalancing:DeleteTargetGroup",
+        "elasticloadbalancing:ModifyTargetGroup",
+        "elasticloadbalancing:ModifyTargetGroupAttributes",
+        "elasticloadbalancing:RemoveTags",
+      ]
+    }
+  }
 }
 
 data "aws_iam_policy_document" "container1" {
@@ -165,6 +187,7 @@ data "aws_iam_policy_document" "container1" {
     effect    = "Allow"
     resources = var.container_app.loadbalancers
     actions = [
+      "elasticloadbalancing:AddTags",
       "elasticloadbalancing:ModifyTargetGroupAttributes",
       "elasticloadbalancing:ModifyLoadBalancerAttributes",
       "elasticloadbalancing:DescribeTargetGroups",
@@ -179,11 +202,44 @@ data "aws_iam_policy_document" "container1" {
     ]
   }
 
+  dynamic "statement" {
+    for_each = var.container_app.alb_loadbalancer_arn != null ? [var.container_app.alb_loadbalancer_arn] : []
+    content {
+      sid       = "albLb0"
+      effect    = "Allow"
+      resources = [statement.value]
+
+      actions = [
+        "elasticloadbalancing:RemoveTags",
+        "elasticloadbalancing:SetSecurityGroups",
+        "elasticloadbalancing:SetSubnets",
+        "elasticloadbalancing:SetIpAddressType",
+      ]
+    }
+  }
+
   statement {
     sid       = "lblistener0"
     effect    = "Allow"
     resources = ["${var.container_app.loadbalancer_listener_arn}/*"]
     actions   = ["elasticloadbalancing:DeleteListener"]
+  }
+
+  dynamic "statement" {
+    for_each = var.container_app.alb_listener_arn != null ? [var.container_app.alb_listener_arn] : []
+    content {
+      sid       = "albListener0"
+      effect    = "Allow"
+      resources = [statement.value]
+
+      actions = [
+        "elasticloadbalancing:AddTags",
+        "elasticloadbalancing:DeleteListener",
+        "elasticloadbalancing:ModifyListener",
+        "elasticloadbalancing:ModifyListenerAttributes",
+        "elasticloadbalancing:RemoveTags",
+      ]
+    }
   }
 
   statement {
